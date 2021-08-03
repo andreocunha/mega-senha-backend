@@ -30,7 +30,7 @@ class Player {
     setGivingHints(status){
         this.givingHints = status;
     }
-    endGame(){
+    endRound(){
         this.givingHints = false;
         this.guessing = false;
     }
@@ -39,9 +39,12 @@ class Player {
 
 let players = []
 let words = ["Casa", "Alura", "Github", "Jacaré", "Elefante", "Macaco", "Alienigena", "Zumbi", "Programador"]
-
+let secretWord = ''
+let hints = []
 
 io.on('connection', (socket) => {
+
+
     console.log(socket.id); // mostra apenas uma vez o id de uma pessoa que acabou de conectar no site
 
     socket.emit('allplayers', players); // envia as informações do jogadores para apenas o jogador que acabou de conectar no sistema
@@ -66,11 +69,30 @@ io.on('connection', (socket) => {
         console.log(player)
     })
 
+
+    // função que recebe uma palavra e verifica se está correta
+    socket.on("guess", (guessWord) => {
+        if(guessWord == secretWord){
+            console.log('Acertou!')
+            players.forEach((player) => {player.addScore(), player.endRound()})
+            console.table(players)
+        }
+    })
+
+    socket.on("hints", (hintWord) => {
+        if(hints.length >= 3) return
+        
+        hints.push(hintWord)
+        io.emit('allHints', hints)
+    })
+
+
     // função que inicia uma rodada
     socket.on('startGame', () => {
-        players.forEach((player) => { player.endGame()}) // zera o status de todos os jogadores
+        players.forEach((player) => { player.endRound()}) // zera o status de todos os jogadores
 
         let word = randomItemList(words); // escolhe uma palavra aleatoria do array
+        secretWord = word;
 
         let player = players.find(player => player.id === socket.id) // encontra o jogador (que deverá descobrir a palavra), no array de jogadores
         player.setGuessing(true); // altera o estado do jogador
