@@ -32,7 +32,7 @@ class Game {
 
     getSpectators(){
         let spectatorsPlayerList = this.players.slice()
-        spectatorsPlayerList.filter( player => player.status === Status.SPECTATOR);
+        spectatorsPlayerList = spectatorsPlayerList.filter( player => player.status === Status.SPECTATING);
         
         return spectatorsPlayerList;
     }
