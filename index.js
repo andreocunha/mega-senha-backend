@@ -1,4 +1,3 @@
-const randomItemList = require('random-item-from-list');
 const io = require("socket.io")(4000, {
     cors: {
         origin: '*',
@@ -46,6 +45,6 @@ io.on('connection', (socket) => {
     socket.on('startGame', () => {
         game.startRound();
         io.emit('allplayers', game.players); // atualiza os dados dos jogadores no front
-        socket.broadcast.emit('word', game.secretWord); // envia a palavra secreta para todos os jogadores, menos para o jogador que deverá descobrir a palavra
+        io.emit('word', game.secretWord); // envia a palavra secreta para todos os jogadores, menos para o jogador que deverá descobrir a palavra
     })
 });
