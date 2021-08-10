@@ -1,6 +1,4 @@
-const port = process.env.PORT || 4000
-
-const io = require("socket.io")(port, {
+const io = require("socket.io")(4000, {
     cors: {
         origin: '*',
     }
