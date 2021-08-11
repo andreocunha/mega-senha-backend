@@ -1,5 +1,3 @@
-//teste da nova funcao do github
-
 const io = require("socket.io")(4000, {
     cors: {
         origin: '*',
