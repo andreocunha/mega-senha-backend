@@ -17,15 +17,15 @@ class Player {
     }
 
     isGuessing() {
-        return this.status === this.Status.GUESSING;
+        return this.status === Status.GUESSING;
     }
 
     isHinting() {
-        return this.status === this.Status.HINTING;
+        return this.status === Status.HINTING;
     }
 
     isSpectating() {
-        return this.status === this.Status.SPECTATING;
+        return this.status === Status.SPECTATING;
     }
 
     addScore() {
@@ -33,7 +33,7 @@ class Player {
             this.score += 2;
         }
 
-        else if (this.isHinting){
+        else if (this.isHinting()){
             this.score += 1;
         }
     }
