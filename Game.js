@@ -66,6 +66,14 @@ class Game {
         this.setPlayerGuivingHints();
     }
 
+    clearGuessedWords(){
+        this.guessedWords = [];
+    }
+
+    clearHints(){
+        this.hints = [];
+    }
+
     clearStatus() {
         this.players.forEach( player => player.setStatus(Status.SPECTATING));
     }

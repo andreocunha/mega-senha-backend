@@ -29,6 +29,9 @@ io.on('connection', (socket) => {
     // função que recebe uma palavra e verifica se está correta
     socket.on("guess", (guessWord) => {
         if(game.guessWord(guessWord)){
+            io.emit("correct");
+            game.clearGuessedWords();
+            game.clearHints();
             console.log('Acertou!')
             console.table(game.players)
         }
