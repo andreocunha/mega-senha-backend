@@ -18,10 +18,8 @@ io.on('connection', (socket) => {
 
     // sempre que alguem faz o login no jogo, ele entra nessa função
     socket.on('newPlayer', nickname => {
-        console.log(nickname);
         game.addPlayer(new Player(socket.id, nickname))
         io.emit('allplayers', game.players);
-        console.log(game.players);
     })
 
     // quando o jogador fecha ou recarrega o navegador, ele entra nessa função
