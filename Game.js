@@ -3,11 +3,33 @@ const { Player, Status } = require('./Player.js');
 
 class Game {
     constructor() {
+        this.round = 0;
+        this.statusGame = false;
         this.players = [];
         this.words = ["Casa", "Alura", "Github", "Jacaré", "Elefante", "Macaco", "Alienigena", "Zumbi", "Programador"];
         this.secretWord = null;
         this.guessedWords = [];
         this.hints = [];
+    }
+
+    setStatusGame(status){
+        this.statusGame = status;
+    }
+
+    getStatusGame(){
+        return this.statusGame;
+    }
+
+    getRound(){
+        return this.round;
+    }
+
+    iterateRound(){
+        this.round++;
+    }
+
+    verifyRound(round){
+        return this.round === round;
     }
 
     addPlayer(player) {
@@ -60,6 +82,7 @@ class Game {
     }
 
     startRound() {
+        this.setStatusGame(true);
         this.clearStatus();
         this.setSecretWord();
         this.setPlayerGuessing();
@@ -82,8 +105,12 @@ class Game {
         
         this.guessedWords.push(guess);
 
-        if (guess === this.secretWord){
+        if (guess.toLowerCase() === this.secretWord.toLowerCase()) {
             this.givePoints();
+            this.iterateRound();
+            this.clearGuessedWords();
+            this.clearHints();
+            this.setStatusGame(false);
             return true;
         }
 
