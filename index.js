@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
             io.emit('correct', game.players);
             io.emit('endRound');
         }
-        io.emit('guessedWords', game.guessedWords);
+        io.emit('allGuess', game.guessedWords);
     })
 
     socket.on("hints", (hintWord) => {
