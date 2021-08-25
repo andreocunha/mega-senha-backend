@@ -14,7 +14,7 @@ io.on('connection', (socket) => {
     console.log(socket.id); // mostra apenas uma vez o id de uma pessoa que acabou de conectar no site
 
     socket.emit('allplayers', game.players); // envia as informações do jogadores para apenas o jogador que acabou de conectar no sistema
-
+    socket.emit('statusGame', game.statusGame); // envia as informações do status do jogo para apenas o jogador que acabou de conectar no sistema
 
     // sempre que alguem faz o login no jogo, ele entra nessa função
     socket.on('newPlayer', nickname => {
@@ -34,12 +34,17 @@ io.on('connection', (socket) => {
             io.emit('correct', game.players);
             io.emit('endRound');
         }
+        io.emit('guessedWords', game.guessedWords);
     })
 
     socket.on("hints", (hintWord) => {
         if(game.giveHint(hintWord)){
             io.emit('allHints', game.hints)
         }
+    })
+
+    socket.on("status", () => {
+        socket.emit('statusGame', game.statusGame);
     })
 
 
