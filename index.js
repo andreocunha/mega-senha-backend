@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
                     game.setStatusGame(false);
                     io.emit('endRound');
                 }
-            }, 30000)
+            }, 40000)
         }
     })
 });
