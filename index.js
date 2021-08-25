@@ -60,6 +60,8 @@ io.on('connection', (socket) => {
                 console.log(round, game.getRound());
 
                 if(game.verifyRound(round)){
+                    game.clearGuessedWords();
+                    game.clearHints();
                     game.iterateRound();
                     game.setStatusGame(false);
                     io.emit('endRound');
