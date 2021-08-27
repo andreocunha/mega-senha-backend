@@ -67,10 +67,6 @@ io.on('connection', (socket) => {
     })
 
     socket.on('restart', () => {
-        game.clearRounds();
-        game.clearGuessedWords();
-        game.clearStatus();
-        game.clearHints();
         game.clearScores();
 
         io.emit('restarted', game.players);
