@@ -53,6 +53,8 @@ io.on('connection', (socket) => {
                 game.setStatusGame(false);
                 return io.emit('lastRound');
             }
+
+            io.emit('allplayers', game.players);
         }
         io.emit('allGuess', game.guessedWords);
     })
