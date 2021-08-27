@@ -5,6 +5,7 @@ const io = require("socket.io")(port, {
         origin: '*',
     }
 });
+const { emit } = require("nodemon");
 const Game = require('./Game.js');
 const { Player } = require('./Player.js');
 const game = new Game();
@@ -22,6 +23,10 @@ io.on('connection', (socket) => {
         io.emit('allplayers', game.players);
     })
 
+    socket.on('round', () => {
+        io.emit('allRounds', game.getRound());
+    })
+
     // quando o jogador fecha ou recarrega o navegador, ele entra nessa função
     socket.once("disconnect", () => {
         game.removePlayer(socket.id)
@@ -30,7 +35,7 @@ io.on('connection', (socket) => {
         if (game.players.length === 0) {
             game.clearGuessedWords();
             game.clearHints();
-            game.iterateRound();
+            game.clearRounds();
             game.setStatusGame(false);
             io.emit("endRound");
         }

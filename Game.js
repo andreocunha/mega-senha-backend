@@ -101,6 +101,10 @@ class Game {
         this.players.forEach( player => player.setStatus(Status.SPECTATING));
     }
 
+    clearRounds() {
+        this.round = 0;
+    }
+
     guessWord(guess){
         
         this.guessedWords.push(guess);
