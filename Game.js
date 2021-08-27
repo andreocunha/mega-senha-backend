@@ -63,7 +63,7 @@ class Game {
         return this.players.find(player => player.id === socketID);
     }
 
-    setSecretWord() {
+    setSecretWord = async function() {
         this.secretWord = randomItemList(this.words);
     }
 
@@ -122,13 +122,7 @@ class Game {
     }
 
     giveHint(hint){
-        if (this.hints.length >= 3) {
-            return false;
-        }
-        else {
-            this.hints.push(hint);
-            return true;
-        }
+        this.hints.push(hint);
     }
 }
 

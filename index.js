@@ -50,9 +50,8 @@ io.on('connection', (socket) => {
     })
 
     socket.on("hints", (hintWord) => {
-        if(game.giveHint(hintWord)){
-            io.emit('allHints', game.hints)
-        }
+        game.giveHint(hintWord)
+        io.emit('allHints', game.hints)
     })
 
     socket.on("status", () => {
@@ -78,7 +77,7 @@ io.on('connection', (socket) => {
                     game.setStatusGame(false);
                     io.emit('endRound');
                 }
-            }, 40000)
+            }, 60000)
         }
     })
 });

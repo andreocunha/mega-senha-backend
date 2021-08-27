@@ -13,6 +13,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "nodemon": "^2.0.12",
+    "palavra-aleatoria": "^0.1.1",
     "random-item-from-list": "^1.0.0",
     "socket.io": "^4.1.3"
   }
