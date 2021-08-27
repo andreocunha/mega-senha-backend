@@ -266,7 +266,7 @@ class Game {
   }
 
   lastRound() {
-    if (this.round === 5) {
+    if (this.round === 30) {
       return true;
     }
 
