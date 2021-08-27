@@ -26,13 +26,20 @@ io.on('connection', (socket) => {
     socket.once("disconnect", () => {
         game.removePlayer(socket.id)
         io.emit('allplayers', game.players);
+
+        if (game.players.length === 0) {
+            game.clearGuessedWords();
+            game.clearHints();
+            game.iterateRound();
+            game.setStatusGame(false);
+            io.emit("endRound");
+        }
     })
 
     // função que recebe uma palavra e verifica se está correta
     socket.on("guess", (guessWord) => {
         if(game.guessWord(guessWord)){
             io.emit('correct', game.players);
-            io.emit('endRound');
         }
         io.emit('allGuess', game.guessedWords);
     })
