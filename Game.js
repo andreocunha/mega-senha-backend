@@ -63,7 +63,7 @@ class Game {
         return this.players.find(player => player.id === socketID);
     }
 
-    setSecretWord = async function() {
+    setSecretWord() {
         this.secretWord = randomItemList(this.words);
     }
 
@@ -102,7 +102,13 @@ class Game {
     }
 
     clearRounds() {
-        this.round = 0;
+        this.round = 1;
+    }
+ 
+    clearScores() {
+        this.players.forEach((player) => {
+            player.score = 0;
+        })
     }
 
     guessWord(guess){
@@ -114,7 +120,11 @@ class Game {
             this.iterateRound();
             this.clearGuessedWords();
             this.clearHints();
-            this.setStatusGame(false);
+            this.setSecretWord();
+            this.clearStatus();
+            this.setPlayerGuessing();
+            this.setPlayerGuivingHints();
+            
             return true;
         }
 
@@ -123,6 +133,14 @@ class Game {
 
     giveHint(hint){
         this.hints.push(hint);
+    }
+
+    lastRound() {
+        if (this.round === 5) {
+            return true;
+        }
+
+        return false;
     }
 }
 

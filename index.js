@@ -44,7 +44,15 @@ io.on('connection', (socket) => {
     // função que recebe uma palavra e verifica se está correta
     socket.on("guess", (guessWord) => {
         if(game.guessWord(guessWord)){
-            io.emit('correct', game.players);
+            io.emit('correct',
+                game.players,
+                game.round,
+                game.secretWord,
+            );
+            if (game.lastRound()) {
+                game.setStatusGame(false);
+                return io.emit('lastRound');
+            }
         }
         io.emit('allGuess', game.guessedWords);
     })
@@ -56,6 +64,16 @@ io.on('connection', (socket) => {
 
     socket.on("status", () => {
         socket.emit('statusGame', game.statusGame);
+    })
+
+    socket.on('restart', () => {
+        game.clearRounds();
+        game.clearGuessedWords();
+        game.clearStatus();
+        game.clearHints();
+        game.clearScores();
+
+        io.emit('restarted', game.players);
     })
 
 
