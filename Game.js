@@ -139,6 +139,11 @@ class Game {
     this.secretWord = null;
     this.guessedWords = [];
     this.hints = [];
+    this.timer;
+    this.maxScore = 100;
+    this.maxTimer = 20000;
+    this.maxRounds = 30;
+    this.io;
   }
 
   setStatusGame(status) {
@@ -147,6 +152,25 @@ class Game {
 
   getStatusGame() {
     return this.statusGame;
+  }
+
+  startTimer() {
+    let round = this.getRound();
+    this.timer = setTimeout(() => {
+
+      if (this.verifyRound(round)) {
+        this.clearGuessedWords();
+        this.clearHints();
+        this.iterateRound();
+        this.setStatusGame(false);
+        this.io.emit("endRound");
+      }
+    }, this.maxTimer);
+  }
+
+  restartTimer() {
+    clearTimeout(this.timer);
+    this.startTimer();
   }
 
   getRound() {
@@ -172,7 +196,7 @@ class Game {
   }
 
   givePoints() {
-    this.players.forEach((player) => player.addScore());
+    this.players.forEach((player) => player.addScore(this.guessedWords, this.hints));
   }
 
   getHinter() {
@@ -244,18 +268,29 @@ class Game {
     });
   }
 
+  verifyScores() {
+    this.players.forEach((player) => {
+      if (player.score >= this.maxScore) {
+        io.emit('maxScore', player);
+      }
+    })
+  }
+
+  nextRound() {
+    this.iterateRound();
+    this.clearGuessedWords();
+    this.clearHints();
+    this.setSecretWord();
+    this.clearStatus();
+    this.setPlayerGuessing();
+    this.setPlayerGuivingHints();
+  }
+
   guessWord(guess) {
     this.guessedWords.push(guess);
 
     if (guess.toLowerCase() === this.secretWord.toLowerCase()) {
-      this.givePoints();
-      this.iterateRound();
-      this.clearGuessedWords();
-      this.clearHints();
-      this.setSecretWord();
-      this.clearStatus();
-      this.setPlayerGuessing();
-      this.setPlayerGuivingHints();
+      this.nextRound();
 
       return true;
     } else return false;
@@ -266,7 +301,7 @@ class Game {
   }
 
   lastRound() {
-    if (this.round === 30) {
+    if (this.round === this.maxRounds) {
       return true;
     }
 

@@ -28,12 +28,16 @@ class Player {
         return this.status === Status.SPECTATING;
     }
 
-    addScore() {
-        if ( this.isGuessing() ){
-            this.score += 2;
+    addScore(guessed, hinted) {
+        if (this.isGuessing()) {
+            if (hinted.length >= 3) {
+              this.score += 1;
+            } else {
+              this.score += 2;
+            }
         }
 
-        else if (this.isHinting()){
+        else if (this.isHinting()) {
             this.score += 1;
         }
     }

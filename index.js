@@ -41,6 +41,12 @@ io.on('connection', (socket) => {
         }
     })
 
+    socket.on('pular', () => {
+        game.nextRound();
+
+        socket.emit("pulou", game.players, game.round, game.secretWord);
+    })
+
     // função que recebe uma palavra e verifica se está correta
     socket.on("guess", (guessWord) => {
         if(game.guessWord(guessWord)){
@@ -49,6 +55,10 @@ io.on('connection', (socket) => {
                 game.round,
                 game.secretWord,
             );
+
+            game.verifyScores();
+            game.restartTimer();
+
             if (game.lastRound()) {
                 game.setStatusGame(false);
                 return io.emit('lastRound');
@@ -82,18 +92,8 @@ io.on('connection', (socket) => {
             io.emit('allplayers', game.players); // atualiza os dados dos jogadores no front
             io.emit('word', game.secretWord); // envia a palavra secreta para todos os jogadores, menos para o jogador que deverá descobrir a palavra
             
-            let round = game.getRound();
-            setTimeout(() => {
-                console.log(round, game.getRound());
-
-                if(game.verifyRound(round)){
-                    game.clearGuessedWords();
-                    game.clearHints();
-                    game.iterateRound();
-                    game.setStatusGame(false);
-                    io.emit('endRound');
-                }
-            }, 30*60*1000)
+            game.io = io;
+            game.startTimer();
         }
     })
 });
